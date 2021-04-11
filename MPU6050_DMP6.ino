@@ -40,8 +40,8 @@ void setup(){
  Wire.write(0x10);
  Wire.endTransmission(true);
 
- 
- calculate_IMU_error(200);
+ Serial.println("starting");
+ calculate_IMU_error(100);
 
  
 }
