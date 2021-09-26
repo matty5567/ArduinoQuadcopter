@@ -19,7 +19,6 @@ void setup(){
   
 
  Serial.begin(19200);
-
  Wire.begin();
 
  // Make Communication and Reset
@@ -40,8 +39,9 @@ void setup(){
  Wire.write(0x10);
  Wire.endTransmission(true);
 
- Serial.println("starting");
- calculate_IMU_error(100);
+ //calculate_IMU_error(10);
+
+ 
 
  
 }
@@ -71,13 +71,13 @@ void loop ()
   accAngleY = AccelerometerY(AccX, AccY, AccZ) - accErrorY;
 
 
-  gyroAngleX = gyroAngleX + GyroX * elapsedTime;
-  gyroAngleY = gyroAngleY + GyroY * elapsedTime;
+  gyroAngleX = roll + GyroX * elapsedTime;
+  gyroAngleY = pitch + GyroY * elapsedTime;
   
   yaw =  yaw + GyroZ * elapsedTime;
   
-  roll  = 0.90 * gyroAngleX + 0.1 * accAngleX;
-  pitch = 0.90 * gyroAngleY + 0.1 * accAngleY;
+  roll  = 0.96 * gyroAngleX + 0.04 * accAngleX;
+  pitch = 0.96 * gyroAngleY + 0.04 * accAngleY;
   
   
   Serial.print(pitch);
@@ -108,9 +108,9 @@ float* get_data(){
 
   temp1   = (Wire.read() << 8 | Wire.read());
 
-  data[3] = (Wire.read() << 8 | Wire.read()) / 500.0;
-  data[4] = (Wire.read() << 8 | Wire.read()) / 500.0;
-  data[5] = (Wire.read() << 8 | Wire.read()) / 500.0;
+  data[3] = (Wire.read() << 8 | Wire.read()) / 131.0;
+  data[4] = (Wire.read() << 8 | Wire.read()) / 131.0;
+  data[5] = (Wire.read() << 8 | Wire.read()) / 131.0;
 
 
   return data;
@@ -151,10 +151,10 @@ void calculate_IMU_error(int cycles){
   }
 
 float AccelerometerX(float accX, float accY, float accZ){
-  return (atan(AccY / sqrt(pow(AccX, 2) + pow(AccZ, 2))));
+  return (atan(AccY / sqrt(pow(AccX, 2) + pow(AccZ, 2))) * 180 / PI);
   }
 
 
 float AccelerometerY(float accX, float accY, float accZ){
-  return(atan(AccX / sqrt(pow(AccY, 2) + pow(AccZ, 2))));
+  return(atan(AccX / sqrt(pow(AccY, 2) + pow(AccZ, 2))) * 180 / PI);
   }

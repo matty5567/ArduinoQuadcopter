@@ -1,6 +1,7 @@
 unsigned int currTime, prevTime;
 int counter, width;
 bool state;
+unsigned int reciever[6];
 
 void setup() {
   Serial.begin(57600);
